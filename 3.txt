@@ -1,0 +1,1 @@
+our research is showing open doors to quantum resistant encryption algorithms that were just a bit hidden, and we found them. upon further research, we developed this algorithm, then we simulateted quantum computers trying to decrypt it without the key, it took 1.27287296+E9467 years to decode. incredable, isn't it? full log on MTP->android /sdcard/simi.log1
