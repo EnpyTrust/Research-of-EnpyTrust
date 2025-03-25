@@ -23,8 +23,8 @@ def load_key(input_file):
     with open(input_file, "rb") as f:
         return f.read()
 
-def logical_scramble(data, key, decrypt=False):
-    """Encrypt or decrypt data using logical + mathematical operations."""
+def logical_scramble(data, key, decrypt=False, rounds=16):
+    """Encrypt or decrypt data using logical + mathematical operations over multiple rounds."""
     key_size = len(key) * 8
     if not is_power_of_2(key_size):
         raise ValueError("Key size must be a power of 2 (e.g., 1024, 4096, 16384, 32768, 65536 bits)")
@@ -33,22 +33,23 @@ def logical_scramble(data, key, decrypt=False):
     key_bytes = bytearray(key)
     pi_factor = int(math.pi * 100)
 
-    for i in range(len(data_bytes)):
-        key_part = key_bytes[i % len(key_bytes)]
-        d = data_bytes[i]
+    for _ in range(rounds):  # Repeat for the specified number of rounds
+        for i in range(len(data_bytes)):
+            key_part = key_bytes[i % len(key_bytes)]
+            d = data_bytes[i]
 
-        if decrypt:
-            d = (d - pi_factor) % 256
-            d = d ^ key_part
-            d = (d - key_part) % 256
-            d = d ^ key_part
-        else:
-            d = d ^ key_part
-            d = (d + key_part) % 256
-            d = d ^ key_part
-            d = (d + pi_factor) % 256
+            if decrypt:
+                d = (d - pi_factor) % 256
+                d = d ^ key_part
+                d = (d - key_part) % 256
+                d = d ^ key_part
+            else:
+                d = d ^ key_part
+                d = (d + key_part) % 256
+                d = d ^ key_part
+                d = (d + pi_factor) % 256
 
-        data_bytes[i] = d
+            data_bytes[i] = d
 
     return bytes(data_bytes)
 
@@ -59,7 +60,7 @@ def process_file(input_file, output_file, key_file, decrypt=False):
     with open(input_file, "rb") as f:
         data = f.read()
 
-    processed_data = logical_scramble(data, key, decrypt)
+    processed_data = logical_scramble(data, key, decrypt, rounds=16)
 
     with open(output_file, "wb") as f:
         f.write(processed_data)
