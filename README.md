@@ -8,3 +8,6 @@ We are making a "cure" for the weak encryption algorithm's used for SSL certs an
 
 # how we do it
 This is confidential Information that we can't share to anyone out side of this organiztaion.
+
+# how to use lmea
+generate a key, then use the key and... i forgot what is was so... figure it out i guess?
